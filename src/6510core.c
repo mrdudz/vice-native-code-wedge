@@ -1045,6 +1045,26 @@ be found that works for both.
         JUMP(dest_addr);                                             \
     } while (0)
 
+#ifndef DRIVE_CPU
+
+// Alternate JSR for redirecting jump.
+#define JSR()                                         \
+    do {                                              \
+        unsigned int tmp_addr;                        \
+                                                      \
+        CLK_ADD(CLK, 1);                              \
+        INC_PC(2);                                    \
+        CLK_ADD(CLK, 2);                              \
+        PUSH(((reg_pc) >> 8) & 0xff);                 \
+        PUSH((reg_pc) & 0xff);                        \
+        tmp_addr = (p1 | (FETCH_PARAM(reg_pc) << 8)); \
+        CLK_ADD(CLK, CLK_JSR_INT_CYCLE);              \
+        /*JUMP(tmp_addr);*/                               \
+        alternate_jump(tmp_addr); \
+    } while (0)
+
+#else
+    
 #define JSR()                                         \
     do {                                              \
         unsigned int tmp_addr;                        \
@@ -1058,6 +1078,8 @@ be found that works for both.
         CLK_ADD(CLK, CLK_JSR_INT_CYCLE);              \
         JUMP(tmp_addr);                               \
     } while (0)
+
+#endif
 
 #define LAS(value, clk_inc, pc_inc) \
     do {                            \

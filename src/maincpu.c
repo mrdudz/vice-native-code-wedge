@@ -295,6 +295,8 @@ void maincpu_init(void)
 
     /* cpu specifix additional init routine */
     CPU_ADDITIONAL_INIT();
+    
+    init_alternate_jump_table();
 }
 
 void maincpu_shutdown(void)
@@ -401,8 +403,6 @@ void maincpu_resync_limits(void)
     }
 }
 
-void maincpu_mainloop(void)
-{
 #ifndef C64DTV
     /* Notice that using a struct for these would make it a lot slower (at
        least, on gcc 2.7.2.x).  */
@@ -452,6 +452,8 @@ void maincpu_mainloop(void)
     int bank_start = 0;
     int bank_limit = 0;
 
+void maincpu_mainloop(void)
+{
     o_bank_base = &bank_base;
     o_bank_start = &bank_start;
     o_bank_limit = &bank_limit;
@@ -803,4 +805,38 @@ fail:
         snapshot_module_close(m);
     }
     return -1;
+}
+
+void (*alternate_jump_function_table[0x10000])(void);
+
+/* ------------------------------------------------------------------------- */
+void init_alternate_jump_table(void)
+{
+  int i;
+  for (i = 0; i < 0x10000; ++i)
+  {
+    alternate_jump_function_table[i] = NULL;
+  }
+  
+  alternate_jump_function_table[0x083c] = aj_083C;
+};
+
+void alternate_jump(unsigned int address)
+{
+  void (*alternate_jump_function)(void) = alternate_jump_function_table[address];
+  
+  if (alternate_jump_function == NULL)
+  {
+    JUMP(address);
+    
+    return;
+  }
+  
+  alternate_jump_function();
+  RTS();
+}
+
+void aj_083C(void)
+{
+  STORE(0xd021, 2);
 }
