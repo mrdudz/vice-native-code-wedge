@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <dlfcn.h>
 
 #include "6510core.h"
 #include "alarm.h"
@@ -830,6 +831,7 @@ void (*alternate_jump_function_table[0x10000])(void);
 void clear_jump_table(void)
 {
   int i;
+  
   for (i = 0; i < 0x10000; ++i)
   {
     alternate_jump_function_table[i] = NULL;
@@ -850,9 +852,38 @@ void* alternate_jump_library_handle;
 /* ------------------------------------------------------------------------- */
 void init_alternate_jump_table(void)
 {
+  void** _load = NULL;
+  void** _store = NULL;
+  void** _clear_jump_table = NULL;
+  void** _set_jump = NULL;
+  void (*initialize)(void) = NULL;
+  
   clear_jump_table();
   
-  set_jump(0x083c, aj_083c);
+  alternate_jump_library_handle = dlopen("routines.so", RTLD_NOW);
+  
+  if (alternate_jump_library_handle != NULL)
+  {
+    _load = dlsym(alternate_jump_library_handle, "load");
+    _store = dlsym(alternate_jump_library_handle, "store");
+    _clear_jump_table = dlsym(alternate_jump_library_handle, "clear_jump_table");
+    _set_jump = dlsym(alternate_jump_library_handle, "set_jump");
+    initialize = dlsym(alternate_jump_library_handle, "Initialize");
+    
+    if (_load != NULL &&
+        _store != NULL &&
+        _clear_jump_table != NULL &&
+        _set_jump != NULL &&
+        initialize != NULL)
+    {
+      *_load = load;
+      *_store = store;
+      *_clear_jump_table = clear_jump_table;
+      *_set_jump = set_jump;
+    
+      initialize();
+    }
+  }
 };
 
 void alternate_jump(unsigned int address)
@@ -868,9 +899,4 @@ void alternate_jump(unsigned int address)
   
   alternate_jump_function();
   RTS();
-}
-
-void aj_083c(void)
-{
-  store(0xd021, 2);
 }
