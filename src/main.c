@@ -96,6 +96,8 @@ static int init_done = 0;
  */
 #define TERM_TMP_SIZE  80
 
+char alt_routines_library_filename[256];
+
 /* ------------------------------------------------------------------------- */
 
 /* This is the main program entry point.  Call this from `main()'.  */
@@ -107,6 +109,7 @@ int main_program(int argc, char **argv)
     char term_tmp[TERM_TMP_SIZE];
     size_t name_len;
 
+    alt_routines_library_filename[0] = 0;
 
     lib_init_rand();
 

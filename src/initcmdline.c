@@ -188,6 +188,15 @@ static int cmdline_attach(const char *param, void *extra_param)
     return 0;
 }
 
+extern char alt_routines_library_filename[];
+
+static int cmdline_alt_routine_file(const char *param, void *extra_param)
+{
+  strcpy(alt_routines_library_filename, param);
+  
+  return 0;
+}
+
 static const cmdline_option_t common_cmdline_options[] = {
     { "-help", CALL_FUNCTION, 0,
       cmdline_help, NULL, NULL, NULL,
@@ -302,6 +311,11 @@ static const cmdline_option_t cmdline_options[] = {
       cmdline_attach, (void *)11, NULL, NULL,
       USE_PARAM_ID, USE_DESCRIPTION_ID,
       IDCLS_P_NAME, IDCLS_ATTACH_AS_DISK_11,
+      NULL, NULL },
+    { "-alt_routines_file", CALL_FUNCTION, 1,
+      cmdline_alt_routine_file, NULL, NULL, NULL,
+      USE_PARAM_ID, USE_DESCRIPTION_ID,
+      IDCLS_P_NAME, IDCLS_SPECIFY_ALT_ROUTINES_FILE,
       NULL, NULL },
     CMDLINE_LIST_END
 };

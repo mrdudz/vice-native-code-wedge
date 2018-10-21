@@ -823,6 +823,7 @@ void store(unsigned int address, char value)
 /* ------------------------------------------------------------------------- */
 void (*alternate_jump_function_table[0x10000])(void);
 int alternate_jump_style_table[0x10000];
+extern char alt_routines_library_filename[];
 
 /* ------------------------------------------------------------------------- */
 void clear_jump_table(void)
@@ -857,7 +858,12 @@ void init_alternate_jump_table(void)
   
   clear_jump_table();
   
-  alternate_jump_library_handle = dlopen("routines.so", RTLD_NOW);
+  alternate_jump_library_handle = NULL;
+  
+  if (alt_routines_library_filename[0] != 0)
+  {
+    alternate_jump_library_handle = dlopen(alt_routines_library_filename, RTLD_NOW);
+  }
   
   if (alternate_jump_library_handle != NULL)
   {

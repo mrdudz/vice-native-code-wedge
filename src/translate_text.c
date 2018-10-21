@@ -16894,6 +16894,9 @@ translate_t string_table[] = {
 /* tr */ {IDCLS_ATTACH_AS_DISK_11_TR, "Sürücü #11 disk imajý olarak <isim> yerleþtir"},
 #endif
 
+/* initcmdline.c */
+/* en */ {IDCLS_SPECIFY_ALT_ROUTINES_FILE, N_("Specify a library file for running alternate routines.")},
+
 /* kbdbuf.c */
 /* en */ {IDCLS_P_STRING,    N_("<string>")},
 #ifdef HAS_TRANSLATION
