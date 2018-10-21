@@ -809,25 +809,22 @@ fail:
 }
 
 /* ------------------------------------------------------------------------- */
-
 char load(unsigned int address)
 {
   return LOAD(address);
 }
 
 /* ------------------------------------------------------------------------- */
-
 void store(unsigned int address, char value)
 {
   STORE(address, value);
 }
 
 /* ------------------------------------------------------------------------- */
-
 void (*alternate_jump_function_table[0x10000])(void);
+int alternate_jump_style_table[0x10000];
 
 /* ------------------------------------------------------------------------- */
-
 void clear_jump_table(void)
 {
   int i;
@@ -835,18 +832,18 @@ void clear_jump_table(void)
   for (i = 0; i < 0x10000; ++i)
   {
     alternate_jump_function_table[i] = NULL;
+    alternate_jump_style_table[i] = 0;
   }
 }
 
 /* ------------------------------------------------------------------------- */
-
-void set_jump(unsigned int address, void* function)
+void set_jump(unsigned int address, void* function, int style)
 {
   alternate_jump_function_table[address] = function;
+  alternate_jump_style_table[address] = style;
 }
 
 /* ------------------------------------------------------------------------- */
-
 void* alternate_jump_library_handle;
 
 /* ------------------------------------------------------------------------- */
@@ -886,6 +883,7 @@ void init_alternate_jump_table(void)
   }
 };
 
+/* ------------------------------------------------------------------------- */
 void alternate_jump(unsigned int address)
 {
   void (*alternate_jump_function)(void) = alternate_jump_function_table[address];
@@ -898,5 +896,15 @@ void alternate_jump(unsigned int address)
   }
   
   alternate_jump_function();
-  RTS();
+  
+  int jump_style = alternate_jump_style_table[address];
+  
+  if (jump_style == 0)
+  {
+    RTS();
+  }
+  else if (jump_style < 0)
+  {
+    JUMP(address);
+  }
 }

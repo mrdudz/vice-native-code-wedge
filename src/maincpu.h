@@ -109,7 +109,7 @@ extern unsigned int maincpu_get_sp(void);
 static char load(unsigned int address);
 static void store(unsigned int address, char value);
 static void clear_jump_table(void);
-static void set_jump(unsigned int address, void* function);
+static void set_jump(unsigned int address, void* function, int style);
 
 extern void init_alternate_jump_table(void);
 extern void alternate_jump(unsigned int address);
