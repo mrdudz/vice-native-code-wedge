@@ -106,8 +106,12 @@ extern unsigned int maincpu_get_x(void);
 extern unsigned int maincpu_get_y(void);
 extern unsigned int maincpu_get_sp(void);
 
+extern char load(unsigned int address);
+extern void store(unsigned int address, char value);
+extern void clear_jump_table(void);
+extern void set_jump(unsigned int address, void* function);
 extern void init_alternate_jump_table(void);
 extern void alternate_jump(unsigned int address);
-extern void aj_083C(void);
+extern void aj_083c(void);
 
 #endif
