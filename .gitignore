@@ -64,3 +64,4 @@ dkms.conf
 Makefile.in
 /compile
 /configure.ac
+*.directory
