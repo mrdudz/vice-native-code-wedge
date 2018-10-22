@@ -10,7 +10,6 @@
 /xscpu64
 /xvic
 /bin2c
-*.h
 /c1541
 /cartconv
 /geninfocontrib
@@ -25,3 +24,5 @@
 Makefile.in
 /config.h.in
 /config.h.in~
+/config.h
+/infocontrib.h
