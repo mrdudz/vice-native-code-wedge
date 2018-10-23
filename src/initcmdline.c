@@ -228,6 +228,11 @@ static const cmdline_option_t common_cmdline_options[] = {
       USE_PARAM_ID, USE_DESCRIPTION_ID,
       IDCLS_P_FILE, IDCLS_SPECIFY_CONFIG_FILE,
       NULL, NULL },
+    { "-alt_routines_file", CALL_FUNCTION, 1,
+      cmdline_alt_routine_file, NULL, NULL, NULL,
+      USE_PARAM_ID, USE_DESCRIPTION_ID,
+      IDCLS_P_NAME, IDCLS_SPECIFY_ALT_ROUTINES_FILE,
+      NULL, NULL },
     { "-dumpconfig", CALL_FUNCTION, 1,
       cmdline_dumpconfig, NULL, NULL, NULL,
       USE_PARAM_ID, USE_DESCRIPTION_ID,
@@ -311,11 +316,6 @@ static const cmdline_option_t cmdline_options[] = {
       cmdline_attach, (void *)11, NULL, NULL,
       USE_PARAM_ID, USE_DESCRIPTION_ID,
       IDCLS_P_NAME, IDCLS_ATTACH_AS_DISK_11,
-      NULL, NULL },
-    { "-alt_routines_file", CALL_FUNCTION, 1,
-      cmdline_alt_routine_file, NULL, NULL, NULL,
-      USE_PARAM_ID, USE_DESCRIPTION_ID,
-      IDCLS_P_NAME, IDCLS_SPECIFY_ALT_ROUTINES_FILE,
       NULL, NULL },
     CMDLINE_LIST_END
 };

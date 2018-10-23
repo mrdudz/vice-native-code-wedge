@@ -14346,6 +14346,9 @@ static int translate_text_table[][countof(language_table)] = {
 /* tr */  IDCLS_SPECIFY_CONFIG_FILE_TR},
 
 /* initcmdline.c */
+/* en */ {IDCLS_SPECIFY_ALT_ROUTINES_FILE},
+
+/* initcmdline.c */
 /* en */ {IDCLS_SPECIFY_DUMPCONFIG_FILE,
 /* da */  IDCLS_SPECIFY_DUMPCONFIG_FILE_DA,
 /* de */  IDCLS_SPECIFY_DUMPCONFIG_FILE_DE,

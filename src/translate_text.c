@@ -16742,6 +16742,9 @@ translate_t string_table[] = {
 #endif
 
 /* initcmdline.c */
+/* en */ {IDCLS_SPECIFY_ALT_ROUTINES_FILE, N_("Specify a library file for running alternate routines.")},
+
+/* initcmdline.c */
 /* en */ {IDCLS_SPECIFY_DUMPCONFIG_FILE,    N_("Dump all resources to specified config file")},
 #ifdef HAS_TRANSLATION
 /* da */ {IDCLS_SPECIFY_DUMPCONFIG_FILE_DA, ""},  /* fuzzy */
@@ -16893,9 +16896,6 @@ translate_t string_table[] = {
 /* sv */ {IDCLS_ATTACH_AS_DISK_11_SV, "Anslut <namn> som diskettavbildning i enhet 11"},
 /* tr */ {IDCLS_ATTACH_AS_DISK_11_TR, "Sürücü #11 disk imajý olarak <isim> yerleþtir"},
 #endif
-
-/* initcmdline.c */
-/* en */ {IDCLS_SPECIFY_ALT_ROUTINES_FILE, N_("Specify a library file for running alternate routines.")},
 
 /* kbdbuf.c */
 /* en */ {IDCLS_P_STRING,    N_("<string>")},
