@@ -1030,11 +1030,26 @@ be found that works for both.
         }                                                                             \
     } while (0)
 
+#ifndef DRIVE_CPU
+
+// Alternate JMP for redirecting jump.
+#define JMP(addr)   \
+    do {            \
+        alternate_jmp_jump(addr); \
+    } while (0)
+    
+#else
+    
 #define JMP(addr)   \
     do {            \
         JUMP(addr); \
     } while (0)
 
+#endif
+    
+#ifndef DRIVE_CPU
+
+// Alternate JMP for redirecting jump.
 #define JMP_IND()                                                    \
     do {                                                             \
         WORD dest_addr;                                              \
@@ -1042,9 +1057,23 @@ be found that works for both.
         CLK_ADD(CLK, 1);                                             \
         dest_addr |= (LOAD((p2 & 0xff00) | ((p2 + 1) & 0xff)) << 8); \
         CLK_ADD(CLK, 1);                                             \
-        JUMP(dest_addr);                                             \
+        alternate_jmp_jump(dest_addr); \
     } while (0)
 
+#else
+    
+#define JMP_IND()                                                    \
+    do {                                                             \
+        WORD dest_addr;                                              \
+        dest_addr = LOAD(p2);                                        \
+        CLK_ADD(CLK, 1);                                             \
+        dest_addr |= (LOAD((p2 & 0xff00) | ((p2 + 1) & 0xff)) << 8); \
+        CLK_ADD(CLK, 1);                                             \
+        JUMP(dest_addr);                                          \
+    } while (0)
+
+#endif
+    
 #ifndef DRIVE_CPU
 
 // Alternate JSR for redirecting jump.
@@ -1059,8 +1088,7 @@ be found that works for both.
         PUSH((reg_pc) & 0xff);                        \
         tmp_addr = (p1 | (FETCH_PARAM(reg_pc) << 8)); \
         CLK_ADD(CLK, CLK_JSR_INT_CYCLE);              \
-        /*JUMP(tmp_addr);*/                               \
-        alternate_jump(tmp_addr); \
+        alternate_jsr_jump(tmp_addr); \
     } while (0)
 
 #else

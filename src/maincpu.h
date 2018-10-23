@@ -112,6 +112,7 @@ static void clear_jump_table(void);
 static void set_jump(unsigned int address, void* function, int style);
 
 extern void init_alternate_jump_table(void);
-extern void alternate_jump(unsigned int address);
+extern void alternate_jsr_jump(unsigned int address);
+extern void alternate_jmp_jump(unsigned int address);
 
 #endif

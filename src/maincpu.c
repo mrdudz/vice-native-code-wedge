@@ -900,7 +900,7 @@ void init_alternate_jump_table(void)
 };
 
 /* ------------------------------------------------------------------------- */
-void alternate_jump(unsigned int address)
+void alternate_jsr_jump(unsigned int address)
 {
   void (*alternate_jump_function)(void) = alternate_jump_function_table[address];
   
@@ -927,4 +927,27 @@ void alternate_jump(unsigned int address)
   {
     JUMP(address);
   }
+}
+
+/* ------------------------------------------------------------------------- */
+void alternate_jmp_jump(unsigned int address)
+{
+  void (*alternate_jump_function)(void) = alternate_jump_function_table[address];
+  
+  if (alternate_jump_function == NULL)
+  {
+    JUMP(address);
+    
+    return;
+  }
+  
+  static char message[256];
+  sprintf(message, "*** Running alternate routine 0x%x", address);
+  log_message(LOG_DEFAULT, message);
+  
+  alternate_jump_function();
+  
+  // TODO: Allow a way to set program counter from alternate function tables.
+  
+  JUMP(address);
 }
