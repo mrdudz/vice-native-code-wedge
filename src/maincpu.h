@@ -106,8 +106,12 @@ extern unsigned int maincpu_get_x(void);
 extern unsigned int maincpu_get_y(void);
 extern unsigned int maincpu_get_sp(void);
 
-static char load(unsigned int address);
-static void store(unsigned int address, char value);
+static char read_mem(unsigned int address);
+static void write_mem(unsigned int address, char value);
+static char read_reg_a(void);
+static void write_reg_a(char value);
+static char read_reg_y(void);
+static void write_reg_y(char value);
 static void clear_jump_table(void);
 static void set_jump(unsigned int address, void* function, int style);
 

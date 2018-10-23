@@ -809,15 +809,39 @@ fail:
 }
 
 /* ------------------------------------------------------------------------- */
-char load(unsigned int address)
+char read_mem(unsigned int address)
 {
   return LOAD(address);
 }
 
 /* ------------------------------------------------------------------------- */
-void store(unsigned int address, char value)
+void write_mem(unsigned int address, char value)
 {
   STORE(address, value);
+}
+
+/* ------------------------------------------------------------------------- */
+char read_reg_a(void)
+{
+  return reg_a_read;
+}
+
+/* ------------------------------------------------------------------------- */
+void write_reg_a(char value)
+{
+  reg_a_write(value);
+}
+
+/* ------------------------------------------------------------------------- */
+char read_reg_y(void)
+{
+  return reg_y_read;
+}
+
+/* ------------------------------------------------------------------------- */
+void write_reg_y(char value)
+{
+  reg_y_write(value);
 }
 
 /* ------------------------------------------------------------------------- */
@@ -850,8 +874,12 @@ void* alternate_jump_library_handle;
 /* ------------------------------------------------------------------------- */
 void init_alternate_jump_table(void)
 {
-  void** _load = NULL;
-  void** _store = NULL;
+  void** _read_mem = NULL;
+  void** _write_mem = NULL;
+  void** _read_reg_a = NULL;
+  void** _write_reg_a = NULL;
+  void** _read_reg_y = NULL;
+  void** _write_reg_y = NULL;
   void** _clear_jump_table = NULL;
   void** _set_jump = NULL;
   void (*initialize)(void) = NULL;
@@ -867,20 +895,32 @@ void init_alternate_jump_table(void)
   
   if (alternate_jump_library_handle != NULL)
   {
-    _load = dlsym(alternate_jump_library_handle, "load");
-    _store = dlsym(alternate_jump_library_handle, "store");
+    _read_mem = dlsym(alternate_jump_library_handle, "read_mem");
+    _write_mem = dlsym(alternate_jump_library_handle, "write_mem");
+    _read_reg_a = dlsym(alternate_jump_library_handle, "read_reg_a");
+    _write_reg_a = dlsym(alternate_jump_library_handle, "write_reg_a");
+    _read_reg_y = dlsym(alternate_jump_library_handle, "read_reg_y");
+    _write_reg_y = dlsym(alternate_jump_library_handle, "write_reg_y");
     _clear_jump_table = dlsym(alternate_jump_library_handle, "clear_jump_table");
     _set_jump = dlsym(alternate_jump_library_handle, "set_jump");
     initialize = dlsym(alternate_jump_library_handle, "Initialize");
     
-    if (_load != NULL &&
-        _store != NULL &&
+    if (_read_mem != NULL &&
+        _write_mem != NULL &&
+        _read_reg_a != NULL &&
+        _write_reg_a != NULL &&
+        _read_reg_y != NULL &&
+        _write_reg_y != NULL &&
         _clear_jump_table != NULL &&
         _set_jump != NULL &&
         initialize != NULL)
     {
-      *_load = load;
-      *_store = store;
+      *_read_mem = read_mem;
+      *_write_mem = write_mem;
+      *_read_reg_a = read_reg_a;
+      *_write_reg_a = write_reg_a;
+      *_read_reg_y = read_reg_y;
+      *_write_reg_y = write_reg_y;
       *_clear_jump_table = clear_jump_table;
       *_set_jump = set_jump;
     
@@ -893,9 +933,15 @@ void init_alternate_jump_table(void)
     else
     {
       char message[256];
-      sprintf(message, "*** Failed to load alternate routines library: %s\n", alt_routines_library_filename);
+      sprintf(message, "*** Failed to load alternate routines from library: %s", alt_routines_library_filename);
       log_error(LOG_DEFAULT, message);
     }
+  }
+  else
+  {
+    char message[256];
+    sprintf(message, "*** Failed to load alternate routines library: %s", alt_routines_library_filename);
+    log_error(LOG_DEFAULT, message);
   }
 };
 
