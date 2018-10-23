@@ -885,6 +885,16 @@ void init_alternate_jump_table(void)
       *_set_jump = set_jump;
     
       initialize();
+      
+      char message[256];
+      sprintf(message, "*** Loaded alternate routines library: %s", alt_routines_library_filename);
+      log_message(LOG_DEFAULT, message);
+    }
+    else
+    {
+      char message[256];
+      sprintf(message, "*** Failed to load alternate routines library: %s\n", alt_routines_library_filename);
+      log_error(LOG_DEFAULT, message);
     }
   }
 };
@@ -900,6 +910,10 @@ void alternate_jump(unsigned int address)
     
     return;
   }
+  
+  static char message[256];
+  sprintf(message, "*** Running alternate routine 0x%x", address);
+  log_message(LOG_DEFAULT, message);
   
   alternate_jump_function();
   
