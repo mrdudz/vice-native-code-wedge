@@ -833,6 +833,18 @@ void write_reg_a(char value)
 }
 
 /* ------------------------------------------------------------------------- */
+char read_reg_x(void)
+{
+  return reg_x_read;
+}
+
+/* ------------------------------------------------------------------------- */
+void write_reg_x(char value)
+{
+  reg_x_write(value);
+}
+
+/* ------------------------------------------------------------------------- */
 char read_reg_y(void)
 {
   return reg_y_read;
@@ -878,6 +890,8 @@ void init_alternate_jump_table(void)
   void** _write_mem = NULL;
   void** _read_reg_a = NULL;
   void** _write_reg_a = NULL;
+  void** _read_reg_x = NULL;
+  void** _write_reg_x = NULL;
   void** _read_reg_y = NULL;
   void** _write_reg_y = NULL;
   void** _clear_jump_table = NULL;
@@ -899,6 +913,8 @@ void init_alternate_jump_table(void)
     _write_mem = dlsym(alternate_jump_library_handle, "write_mem");
     _read_reg_a = dlsym(alternate_jump_library_handle, "read_reg_a");
     _write_reg_a = dlsym(alternate_jump_library_handle, "write_reg_a");
+    _read_reg_x = dlsym(alternate_jump_library_handle, "read_reg_x");
+    _write_reg_x = dlsym(alternate_jump_library_handle, "write_reg_x");
     _read_reg_y = dlsym(alternate_jump_library_handle, "read_reg_y");
     _write_reg_y = dlsym(alternate_jump_library_handle, "write_reg_y");
     _clear_jump_table = dlsym(alternate_jump_library_handle, "clear_jump_table");
@@ -919,6 +935,8 @@ void init_alternate_jump_table(void)
       *_write_mem = write_mem;
       *_read_reg_a = read_reg_a;
       *_write_reg_a = write_reg_a;
+      *_read_reg_x = read_reg_x;
+      *_write_reg_x = write_reg_x;
       *_read_reg_y = read_reg_y;
       *_write_reg_y = write_reg_y;
       *_clear_jump_table = clear_jump_table;

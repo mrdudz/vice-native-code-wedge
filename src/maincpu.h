@@ -110,6 +110,8 @@ static char read_mem(unsigned int address);
 static void write_mem(unsigned int address, char value);
 static char read_reg_a(void);
 static void write_reg_a(char value);
+static char read_reg_x(void);
+static void write_reg_x(char value);
 static char read_reg_y(void);
 static void write_reg_y(char value);
 static void clear_jump_table(void);
